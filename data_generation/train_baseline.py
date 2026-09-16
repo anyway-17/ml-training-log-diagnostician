@@ -12,14 +12,14 @@ from torch.utils.data import DataLoader, random_split
 from torchvision import datasets, transforms
 
 class SimpleCNN(nn.Module):
-    def __init__(self, freeze_conv1: bool = False, init_scheme: str = "default"):
+    def __init__(self, freeze_conv1: bool = False, freeze_conv2: bool = False, init_scheme: str = "default", dropout_rate: float = 0.25):
         super().__init__()
         self.conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)
         self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
         self.pool = nn.MaxPool2d(2, 2)
         self.fc1 = nn.Linear(64 * 7 * 7, 128)
         self.fc2 = nn.Linear(128, 10)
-        self.dropout = nn.Dropout(0.25)
+        self.dropout = nn.Dropout(dropout_rate)
 
         if init_scheme == "bad":
             for m in [self.conv1, self.conv2, self.fc1, self.fc2]:
@@ -29,6 +29,10 @@ class SimpleCNN(nn.Module):
         if freeze_conv1:
             for p in self.conv1.parameters():
                 p.requires_grad = False
+        if freeze_conv2:
+            for p in self.conv2.parameters():
+                p.requires_grad = False
+
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
@@ -125,7 +129,9 @@ def train(args):
 
     model = SimpleCNN(
         freeze_conv1=args.freeze_conv1,
+        freeze_conv2=args.freeze_conv2,
         init_scheme=args.init_scheme,
+        dropout_rate=args.dropout_rate,
     ).to(device)
 
     optimizer = torch.optim.Adam(
@@ -224,8 +230,10 @@ def parse_args():
     p.add_argument("--train_subset_frac", type=float, default=1.0, help="Shrink training set (overfitting injection)")
     p.add_argument("--label_noise_frac", type=float, default=0.0, help="Fraction of labels to randomly flip")
     p.add_argument("--freeze_conv1", action="store_true", help="Freeze conv1 (misconfigured-layer injection)")
+    p.add_argument("--freeze_conv2", action="store_true", help="Freeze conv2 (misconfigured-layer injection)")
     p.add_argument("--init_scheme", type=str, default="default", choices=["default", "bad"], help="Bad init for vanishing-gradient injection")
     p.add_argument("--output_dir", type=str, default="../data_generation/raw")
+    p.add_argument("--dropout_rate", type=float, default=0.25)
 
     return p.parse_args()
 

@@ -40,9 +40,9 @@ FAILURE_RUNS = [
     {"run_id": "lr_low_03", "seed": 3, "lr": 0.00002, "injected_problem_type": "lr_too_low"},
 
     # --- Overfitting (shrink training set, no weight decay) ---
-    {"run_id": "overfit_01", "seed": 1, "train_subset_frac": 0.05, "injected_problem_type": "overfitting"},
-    {"run_id": "overfit_02", "seed": 2, "train_subset_frac": 0.03, "injected_problem_type": "overfitting"},
-    {"run_id": "overfit_03", "seed": 3, "train_subset_frac": 0.08, "injected_problem_type": "overfitting"},
+    {"run_id": "overfit_01", "seed": 1, "epochs": 30, "train_subset_frac": 0.03, "dropout_rate": 0.0, "injected_problem_type": "overfitting"},
+    {"run_id": "overfit_02", "seed": 2, "epochs": 30, "train_subset_frac": 0.02, "dropout_rate": 0.0, "injected_problem_type": "overfitting"},
+    {"run_id": "overfit_03", "seed": 3, "epochs": 30, "train_subset_frac": 0.03, "dropout_rate": 0.0, "injected_problem_type": "overfitting"},
 
     # --- Vanishing gradients (bad init) ---
     {"run_id": "vanish_grad_01", "seed": 1, "init_scheme": "bad", "injected_problem_type": "vanishing_gradients"},
@@ -54,18 +54,19 @@ FAILURE_RUNS = [
     {"run_id": "label_noise_02", "seed": 2, "label_noise_frac": 0.4, "injected_problem_type": "label_noise"},
     {"run_id": "label_noise_03", "seed": 3, "label_noise_frac": 0.5, "injected_problem_type": "label_noise"},
 
-    # --- Frozen/misconfigured layer ---
-    {"run_id": "frozen_layer_01", "seed": 1, "freeze_conv1": True, "injected_problem_type": "frozen_layer"},
-    {"run_id": "frozen_layer_02", "seed": 2, "freeze_conv1": True, "injected_problem_type": "frozen_layer"},
-    {"run_id": "frozen_layer_03", "seed": 3, "freeze_conv1": True, "injected_problem_type": "frozen_layer"},
+        # --- Frozen/misconfigured layer ---
+    {"run_id": "frozen_layer_01", "seed": 1, "freeze_conv1": True, "freeze_conv2": True, "injected_problem_type": "frozen_layer"},
+    {"run_id": "frozen_layer_02", "seed": 2, "freeze_conv1": True, "freeze_conv2": True, "injected_problem_type": "frozen_layer"},
+    {"run_id": "frozen_layer_03", "seed": 3, "freeze_conv1": True, "freeze_conv2": True, "injected_problem_type": "frozen_layer"},
 ]
 
 
 def build_command(cfg: dict) -> list:
+    epochs = cfg.get("epochs", EPOCHS)
     cmd = [
         sys.executable, "train_baseline.py",
         "--run_id", cfg["run_id"],
-        "--epochs", str(EPOCHS),
+        "--epochs", str(epochs),
         "--seed", str(cfg["seed"]),
     ]
 
@@ -83,6 +84,10 @@ def build_command(cfg: dict) -> list:
         cmd += ["--init_scheme", cfg["init_scheme"]]
     if cfg.get("freeze_conv1"):
         cmd += ["--freeze_conv1"]
+    if cfg.get("freeze_conv2"):
+        cmd += ["--freeze_conv2"]
+    if "dropout_rate" in cfg:
+        cmd += ["--dropout_rate", str(cfg["dropout_rate"])]
 
     return cmd
 
@@ -102,11 +107,21 @@ def run_all(configs: list):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--stage", choices=["healthy", "failures", "all"], default="healthy")
+    parser.add_argument("--filter", type=str, default=None,
+                         help="Only run configs whose run_id contains this substring (e.g. 'overfit')")
     args = parser.parse_args()
 
     if args.stage == "healthy":
-        run_all(HEALTHY_RUNS)
+        configs = HEALTHY_RUNS
     elif args.stage == "failures":
-        run_all(FAILURE_RUNS)
+        configs = FAILURE_RUNS
     else:
-        run_all(HEALTHY_RUNS + FAILURE_RUNS)
+        configs = HEALTHY_RUNS + FAILURE_RUNS
+
+    if args.filter:
+        configs = [cfg for cfg in configs if args.filter in cfg["run_id"]]
+        if not configs:
+            print(f"No runs matched filter '{args.filter}'")
+            sys.exit(1)
+
+    run_all(configs)
