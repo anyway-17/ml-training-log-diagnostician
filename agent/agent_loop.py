@@ -155,15 +155,37 @@ def run_diagnosis(run_id: str, verbose: bool = True) -> dict:
             })
 
     # Hit the call limit without a clean final diagnosis
-    return {
-        "run_id": run_id,
-        "problem_detected": None,
-        "diagnosis": "UNRESOLVED_CALL_LIMIT",
-        "evidence": "Agent hit the tool call limit without producing a final diagnosis.",
-        "confidence": "low",
-        "query_history": query_history,
-        "tool_calls_used": tool_call_count,
-    }
+    # Hit the call limit — force one last text-only answer using whatever evidence exists,
+    # instead of giving up outright.
+    messages.append({
+        "role": "user",
+        "content": "You've used all available queries. Based on everything you've seen so far, "
+                    "give your best final diagnosis now, in the exact JSON format specified. "
+                    "Do not call any tool.",
+    })
+    try:
+        response = client.chat.completions.create(
+            model=MODEL,
+            messages=messages,
+            tool_choice="none",
+        )
+        content = response.choices[0].message.content.strip()
+        diagnosis = json.loads(content)
+        diagnosis["run_id"] = run_id
+        diagnosis["query_history"] = query_history
+        diagnosis["tool_calls_used"] = tool_call_count
+        diagnosis["forced_final_answer"] = True
+        return diagnosis
+    except (json.JSONDecodeError, AttributeError, Exception):
+        return {
+            "run_id": run_id,
+            "problem_detected": None,
+            "diagnosis": "UNRESOLVED_CALL_LIMIT",
+            "evidence": "Agent hit the tool call limit and could not produce a valid final diagnosis.",
+            "confidence": "low",
+            "query_history": query_history,
+            "tool_calls_used": tool_call_count,
+        }
 
 
 if __name__ == "__main__":

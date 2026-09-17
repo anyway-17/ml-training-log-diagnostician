@@ -14,6 +14,10 @@ You have access to one tool: execute_sql(query). You may only run read-only SELE
 
 {SCHEMA_DESCRIPTION}
 
+IMPORTANT: The schema above is complete and accurate. Do NOT query sqlite_master, do NOT attempt \
+PRAGMA statements (they will be rejected), and do NOT try to "discover" the table structure. \
+The two tables are exactly `runs` and `epochs` as described above — go straight to querying them.
+
 ## Possible diagnoses
 - healthy (no problem)
 - lr_too_high
