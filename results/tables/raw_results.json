@@ -1,0 +1,232 @@
+[
+  {
+    "run_id": "frozen_layer_01",
+    "true_label": "problem",
+    "true_problem_type": "frozen_layer",
+    "predicted_problem_detected": false,
+    "predicted_diagnosis": "healthy",
+    "confidence": "high",
+    "evidence": "Training and validation accuracy progress together with small gap, loss steadily decreasing, and stable gradient norms. No signs of overfitting, learning rate issues, vanishing gradients, label noise, or frozen-layer impact on performance.",
+    "tool_calls_used": 5
+  },
+  {
+    "run_id": "frozen_layer_02",
+    "true_label": "problem",
+    "true_problem_type": "frozen_layer",
+    "predicted_problem_detected": false,
+    "predicted_diagnosis": "healthy",
+    "confidence": "high",
+    "evidence": "Training loss steadily decreased and both training and validation accuracy improved together, with a small and stable accuracy gap. Gradient norms remained moderate without collapse, and final test accuracy is high, indicating no overfitting, learning\u2011rate, or gradient issues.",
+    "tool_calls_used": 6
+  },
+  {
+    "run_id": "frozen_layer_03",
+    "true_label": "problem",
+    "true_problem_type": "frozen_layer",
+    "predicted_problem_detected": false,
+    "predicted_diagnosis": "healthy",
+    "confidence": "high",
+    "evidence": "Training and validation accuracy improve together with a small gap, losses decrease steadily, and gradient norms show normal decay. No stagnation, overfitting, or abnormal gradient behavior is observed.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "healthy_01",
+    "true_label": "healthy",
+    "true_problem_type": "none",
+    "predicted_problem_detected": false,
+    "predicted_diagnosis": "healthy",
+    "confidence": "high",
+    "evidence": "Training and validation accuracy both increase steadily and stay within a few percent of each other, with loss decreasing and gradient norms remaining moderate throughout the 10 epochs. No large train/val gap, no loss plateau, and configuration shows no label noise or frozen layers.",
+    "tool_calls_used": 5
+  },
+  {
+    "run_id": "healthy_02",
+    "true_label": "healthy",
+    "true_problem_type": "none",
+    "predicted_problem_detected": false,
+    "predicted_diagnosis": "healthy",
+    "confidence": "high",
+    "evidence": "Training and validation accuracy both increase together, with a small gap (<3%) throughout 10 epochs. Losses decrease smoothly and grad_norm stays moderate (~1.2-2.0) without collapsing, indicating stable learning and no overfitting, vanishing gradients, or learning\u2011rate issues.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "healthy_03",
+    "true_label": "healthy",
+    "true_problem_type": "none",
+    "predicted_problem_detected": false,
+    "predicted_diagnosis": "healthy",
+    "confidence": "high",
+    "evidence": "Training and validation accuracy both improve steadily, with a small ~2-3% gap and low, decreasing loss. Gradient norms remain moderate (~1.3-2) without collapse, and the learning rate of 0.001 yields stable progress.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "healthy_04",
+    "true_label": "healthy",
+    "true_problem_type": "none",
+    "predicted_problem_detected": false,
+    "predicted_diagnosis": "healthy",
+    "confidence": "high",
+    "evidence": "Training and validation accuracy both improve steadily with a small gap (<0.03) and loss decreases throughout. Gradients remain moderate and do not collapse, indicating stable learning.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "healthy_05",
+    "true_label": "healthy",
+    "true_problem_type": "none",
+    "predicted_problem_detected": false,
+    "predicted_diagnosis": "healthy",
+    "confidence": "high",
+    "evidence": "Training and validation loss steadily decrease while accuracies improve and remain close (gap < 0.03). Gradient norms stay moderate (~1.8\u21921.2) without collapse. Test accuracy is high (0.9159). No signs of overfitting, learning\u2011rate issues, vanishing gradients, label noise, or frozen layers.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "label_noise_01",
+    "true_label": "problem",
+    "true_problem_type": "label_noise",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "label_noise",
+    "confidence": "medium",
+    "evidence": "Training accuracy improves slowly and remains well below typical clean runs, while validation accuracy and loss show little improvement and validation loss even increases slightly, indicating the model is learning from noisy labels. Gradient norms remain stable, ruling out vanishing gradients or learning rate issues.",
+    "tool_calls_used": 3
+  },
+  {
+    "run_id": "label_noise_02",
+    "true_label": "problem",
+    "true_problem_type": "label_noise",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "label_noise",
+    "confidence": "high",
+    "evidence": "The run has a 40% label noise setting; training and validation accuracy plateau around ~55% with only slight loss reduction, while train/val loss remain high. The gap between train and val metrics is minimal, indicating the issue is not overfitting but the noisy supervision limiting learning.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "label_noise_03",
+    "true_label": "problem",
+    "true_problem_type": "label_noise",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "label_noise",
+    "confidence": "high",
+    "evidence": "The run was configured with 50% label noise. Training and validation accuracies stay low (\u22480.45) and loss plateaus early, indicating the model cannot learn the true patterns from the corrupted labels. The gap between train and val metrics is small, ruling out overfitting, and the learning rate is typical, so label noise is the primary issue.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "lr_high_01",
+    "true_label": "problem",
+    "true_problem_type": "lr_too_high",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "lr_too_high",
+    "confidence": "high",
+    "evidence": "Training and validation loss remain stuck around 2.30 (\u2248 ln(10)) with ~10% accuracy throughout all epochs, and grad_norm drops sharply after epoch 1 to a very small value. This pattern matches an excessively high learning rate pushing the model into a saturated state.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "lr_high_02",
+    "true_label": "problem",
+    "true_problem_type": "lr_too_high",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "lr_too_high",
+    "confidence": "high",
+    "evidence": "Training and validation loss remain around 2.3 (\u2248ln(num_classes)) with accuracies near 0.1 throughout, indicating no learning. Gradients are moderate in epoch 1 (0.71) then drop to ~0.12, consistent with a high learning rate saturating the model early rather than a large initial gradient collapse.",
+    "tool_calls_used": 5
+  },
+  {
+    "run_id": "lr_high_03",
+    "true_label": "problem",
+    "true_problem_type": "lr_too_high",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "lr_too_high",
+    "confidence": "high",
+    "evidence": "The run uses a very high learning rate (0.08). Train/val loss stays around 2.31 (\u2248ln(num_classes)) and accuracy remains ~10% (random guessing). Gradients drop from ~1.27 in epoch 1 to ~0.12 thereafter, indicating saturation caused by excessive learning rate.",
+    "tool_calls_used": 5
+  },
+  {
+    "run_id": "lr_low_01",
+    "true_label": "problem",
+    "true_problem_type": "lr_too_low",
+    "predicted_problem_detected": false,
+    "predicted_diagnosis": "healthy",
+    "confidence": "high",
+    "evidence": "Training and validation loss both steadily decrease and accuracies improve together, with final test accuracy ~0.81. Gradient norms increase rather than vanish, and there is no large train/val gap indicating overfitting.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "lr_low_02",
+    "true_label": "problem",
+    "true_problem_type": "lr_too_low",
+    "predicted_problem_detected": false,
+    "predicted_diagnosis": "healthy",
+    "confidence": "high",
+    "evidence": "Both training and validation loss steadily decreased and accuracies improved across all epochs, with a small train/val accuracy gap and increasing gradient norms, indicating proper learning despite the low learning rate.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "lr_low_03",
+    "true_label": "problem",
+    "true_problem_type": "lr_too_low",
+    "predicted_problem_detected": false,
+    "predicted_diagnosis": "healthy",
+    "confidence": "high",
+    "evidence": "Both training and validation loss steadily decreased and accuracies rose to ~0.85 with a small train/val gap, and gradient norms remained stable/increasing. No signs of overfitting, gradient collapse, or other issues.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "overfit_01",
+    "true_label": "problem",
+    "true_problem_type": "overfitting",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "overfitting",
+    "confidence": "high",
+    "evidence": "Training accuracy rises steadily to ~0.96 while validation accuracy plateaus around ~0.85, creating a growing gap after epoch 10. Training loss continues to drop to ~0.12, but validation loss stalls near ~0.5, indicating the model is fitting the training data too closely. Gradient norms remain stable, ruling out vanishing gradients.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "overfit_02",
+    "true_label": "problem",
+    "true_problem_type": "overfitting",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "overfitting",
+    "confidence": "high",
+    "evidence": "Training accuracy rises to ~0.96 while validation accuracy plateaus around 0.84 and even slightly declines after epoch 20, creating a growing train\u2011val gap (~0.13). Training loss keeps decreasing whereas validation loss stagnates around 0.5, a classic sign of overfitting.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "overfit_03",
+    "true_label": "problem",
+    "true_problem_type": "overfitting",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "overfitting",
+    "confidence": "high",
+    "evidence": "Training accuracy climbs to ~0.96 while validation accuracy plateaus around ~0.84\u20130.85, creating a persistent ~0.1 gap. Training loss continues to drop whereas validation loss stagnates, indicating the model is memorizing the small training subset.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "vanish_grad_01",
+    "true_label": "problem",
+    "true_problem_type": "vanishing_gradients",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "vanishing_gradients",
+    "confidence": "high",
+    "evidence": "Epoch 1 shows an extremely large gradient norm (~1.9e5) that collapses sharply over subsequent epochs to a few hundred, while loss remains extremely high and accuracy stays low and decreases, indicating gradients vanish after a poor initialization. The learning rate is modest, ruling out lr_too_high.",
+    "tool_calls_used": 6
+  },
+  {
+    "run_id": "vanish_grad_02",
+    "true_label": "problem",
+    "true_problem_type": "vanishing_gradients",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "vanishing_gradients",
+    "confidence": "high",
+    "evidence": "Grad_norm starts extremely high (212k) in epoch 1 and collapses rapidly to under 1k by epoch 10, while loss remains very large and both training and validation accuracy drop sharply, a hallmark of vanishing gradients caused by poor initialization.",
+    "tool_calls_used": 2
+  },
+  {
+    "run_id": "vanish_grad_03",
+    "true_label": "problem",
+    "true_problem_type": "vanishing_gradients",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "vanishing_gradients",
+    "confidence": "high",
+    "evidence": "Grad_norm starts extremely high (~292k) in epoch 1 and collapses steadily to ~749 by epoch 10, while both training and validation loss drop but accuracy also falls to near random (~0.13). This pattern matches the classic signature of vanishing gradients from a bad initialization.",
+    "tool_calls_used": 3
+  }
+]

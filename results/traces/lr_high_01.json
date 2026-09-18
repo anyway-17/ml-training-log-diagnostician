@@ -1,0 +1,126 @@
+{
+  "problem_detected": true,
+  "diagnosis": "lr_too_high",
+  "evidence": "Training and validation loss remain stuck around 2.30 (\u2248 ln(10)) with ~10% accuracy throughout all epochs, and grad_norm drops sharply after epoch 1 to a very small value. This pattern matches an excessively high learning rate pushing the model into a saturated state.",
+  "confidence": "high",
+  "run_id": "lr_high_01",
+  "query_history": [
+    {
+      "query": "SELECT * FROM runs WHERE run_id = 'lr_high_01';",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "config_json",
+          "test_acc",
+          "created_at"
+        ],
+        "rows": [
+          [
+            "lr_high_01",
+            "{\"epochs\": 10, \"batch_size\": 64, \"lr\": 0.03, \"weight_decay\": 0.0, \"seed\": 1, \"train_subset_frac\": 1.0, \"label_noise_frac\": 0.0, \"freeze_conv1\": false, \"freeze_conv2\": false, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\", \"dropout_rate\": 0.25}",
+            0.1,
+            "2026-08-25 22:53:01"
+          ]
+        ]
+      }
+    },
+    {
+      "query": "SELECT epoch, train_loss, val_loss, train_acc, val_acc, grad_norm FROM epochs WHERE run_id = 'lr_high_01' ORDER BY epoch;",
+      "result": {
+        "success": true,
+        "columns": [
+          "epoch",
+          "train_loss",
+          "val_loss",
+          "train_acc",
+          "val_acc",
+          "grad_norm"
+        ],
+        "rows": [
+          [
+            1,
+            2.379588,
+            2.30636,
+            0.098444,
+            0.098333,
+            0.440673
+          ],
+          [
+            2,
+            2.305409,
+            2.305776,
+            0.098593,
+            0.092,
+            0.11893
+          ],
+          [
+            3,
+            2.305417,
+            2.305877,
+            0.100167,
+            0.094667,
+            0.119194
+          ],
+          [
+            4,
+            2.305193,
+            2.308036,
+            0.100352,
+            0.098667,
+            0.11577
+          ],
+          [
+            5,
+            2.3055,
+            2.304603,
+            0.099574,
+            0.103,
+            0.117805
+          ],
+          [
+            6,
+            2.305461,
+            2.305529,
+            0.10037,
+            0.11,
+            0.119101
+          ],
+          [
+            7,
+            2.305305,
+            2.308155,
+            0.100574,
+            0.103,
+            0.117233
+          ],
+          [
+            8,
+            2.305768,
+            2.303925,
+            0.097741,
+            0.098667,
+            0.11936
+          ],
+          [
+            9,
+            2.305433,
+            2.31208,
+            0.101278,
+            0.099833,
+            0.117645
+          ],
+          [
+            10,
+            2.305458,
+            2.306717,
+            0.100741,
+            0.103,
+            0.117853
+          ]
+        ]
+      }
+    }
+  ],
+  "tool_calls_used": 2
+}

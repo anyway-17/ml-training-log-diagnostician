@@ -1,0 +1,126 @@
+{
+  "problem_detected": true,
+  "diagnosis": "label_noise",
+  "evidence": "The run has a 40% label noise setting; training and validation accuracy plateau around ~55% with only slight loss reduction, while train/val loss remain high. The gap between train and val metrics is minimal, indicating the issue is not overfitting but the noisy supervision limiting learning.",
+  "confidence": "high",
+  "run_id": "label_noise_02",
+  "query_history": [
+    {
+      "query": "SELECT * FROM runs WHERE run_id = 'label_noise_02'",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "config_json",
+          "test_acc",
+          "created_at"
+        ],
+        "rows": [
+          [
+            "label_noise_02",
+            "{\"epochs\": 10, \"batch_size\": 64, \"lr\": 0.001, \"weight_decay\": 0.0, \"seed\": 2, \"train_subset_frac\": 1.0, \"label_noise_frac\": 0.4, \"freeze_conv1\": false, \"freeze_conv2\": false, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\", \"dropout_rate\": 0.25}",
+            0.8898,
+            "2026-08-25 23:49:08"
+          ]
+        ]
+      }
+    },
+    {
+      "query": "SELECT epoch, train_loss, val_loss, train_acc, val_acc, grad_norm FROM epochs WHERE run_id = 'label_noise_02' ORDER BY epoch",
+      "result": {
+        "success": true,
+        "columns": [
+          "epoch",
+          "train_loss",
+          "val_loss",
+          "train_acc",
+          "val_acc",
+          "grad_norm"
+        ],
+        "rows": [
+          [
+            1,
+            1.823829,
+            1.753922,
+            0.470278,
+            0.503167,
+            1.167839
+          ],
+          [
+            2,
+            1.744896,
+            1.733747,
+            0.515389,
+            0.517167,
+            1.070714
+          ],
+          [
+            3,
+            1.720229,
+            1.720391,
+            0.527463,
+            0.525833,
+            1.012489
+          ],
+          [
+            4,
+            1.703112,
+            1.709563,
+            0.535463,
+            0.530667,
+            0.982419
+          ],
+          [
+            5,
+            1.686907,
+            1.712625,
+            0.540685,
+            0.536167,
+            0.979802
+          ],
+          [
+            6,
+            1.670391,
+            1.70433,
+            0.544519,
+            0.536667,
+            0.976532
+          ],
+          [
+            7,
+            1.657211,
+            1.720849,
+            0.548704,
+            0.534667,
+            0.974047
+          ],
+          [
+            8,
+            1.640641,
+            1.716554,
+            0.55087,
+            0.5355,
+            1.011168
+          ],
+          [
+            9,
+            1.622311,
+            1.725378,
+            0.553648,
+            0.533833,
+            1.026817
+          ],
+          [
+            10,
+            1.602985,
+            1.734585,
+            0.556574,
+            0.535667,
+            1.07446
+          ]
+        ]
+      }
+    }
+  ],
+  "tool_calls_used": 2
+}

@@ -1,0 +1,133 @@
+{
+  "problem_detected": true,
+  "diagnosis": "label_noise",
+  "evidence": "Training accuracy improves slowly and remains well below typical clean runs, while validation accuracy and loss show little improvement and validation loss even increases slightly, indicating the model is learning from noisy labels. Gradient norms remain stable, ruling out vanishing gradients or learning rate issues.",
+  "confidence": "medium",
+  "run_id": "label_noise_01",
+  "query_history": [
+    {
+      "query": "SELECT run_id, model_name, learning_rate, batch_size, epochs, final_train_acc, final_val_acc, final_test_acc FROM runs WHERE run_id = 'label_noise_01';",
+      "result": {
+        "success": false,
+        "error": "SQL error: no such column: model_name"
+      }
+    },
+    {
+      "query": "SELECT * FROM runs WHERE run_id = 'label_noise_01' LIMIT 1;",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "config_json",
+          "test_acc",
+          "created_at"
+        ],
+        "rows": [
+          [
+            "label_noise_01",
+            "{\"epochs\": 10, \"batch_size\": 64, \"lr\": 0.001, \"weight_decay\": 0.0, \"seed\": 1, \"train_subset_frac\": 1.0, \"label_noise_frac\": 0.3, \"freeze_conv1\": false, \"freeze_conv2\": false, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\", \"dropout_rate\": 0.25}",
+            0.8978,
+            "2026-08-25 23:46:18"
+          ]
+        ]
+      }
+    },
+    {
+      "query": "SELECT epoch, train_loss, train_acc, val_loss, val_acc, grad_norm FROM epochs WHERE run_id = 'label_noise_01' ORDER BY epoch;",
+      "result": {
+        "success": true,
+        "columns": [
+          "epoch",
+          "train_loss",
+          "train_acc",
+          "val_loss",
+          "val_acc",
+          "grad_norm"
+        ],
+        "rows": [
+          [
+            1,
+            1.610553,
+            0.556889,
+            1.497999,
+            0.602667,
+            1.337266
+          ],
+          [
+            2,
+            1.504052,
+            0.60837,
+            1.479948,
+            0.608,
+            1.181301
+          ],
+          [
+            3,
+            1.471053,
+            0.621426,
+            1.448005,
+            0.6225,
+            1.146025
+          ],
+          [
+            4,
+            1.447312,
+            0.629537,
+            1.447242,
+            0.621333,
+            1.129697
+          ],
+          [
+            5,
+            1.429596,
+            0.634722,
+            1.439608,
+            0.6285,
+            1.141428
+          ],
+          [
+            6,
+            1.409823,
+            0.639407,
+            1.446288,
+            0.629333,
+            1.145301
+          ],
+          [
+            7,
+            1.389804,
+            0.644111,
+            1.444939,
+            0.630167,
+            1.186688
+          ],
+          [
+            8,
+            1.367088,
+            0.647389,
+            1.457547,
+            0.634333,
+            1.216673
+          ],
+          [
+            9,
+            1.341541,
+            0.651185,
+            1.474527,
+            0.630833,
+            1.268947
+          ],
+          [
+            10,
+            1.313179,
+            0.655833,
+            1.484164,
+            0.633,
+            1.334433
+          ]
+        ]
+      }
+    }
+  ],
+  "tool_calls_used": 3
+}
