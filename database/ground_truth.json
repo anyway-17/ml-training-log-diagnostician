@@ -1,0 +1,94 @@
+{
+  "frozen_layer_01": {
+    "label": "problem",
+    "injected_problem_type": "frozen_layer"
+  },
+  "frozen_layer_02": {
+    "label": "problem",
+    "injected_problem_type": "frozen_layer"
+  },
+  "frozen_layer_03": {
+    "label": "problem",
+    "injected_problem_type": "frozen_layer"
+  },
+  "healthy_01": {
+    "label": "healthy",
+    "injected_problem_type": "none"
+  },
+  "healthy_02": {
+    "label": "healthy",
+    "injected_problem_type": "none"
+  },
+  "healthy_03": {
+    "label": "healthy",
+    "injected_problem_type": "none"
+  },
+  "healthy_04": {
+    "label": "healthy",
+    "injected_problem_type": "none"
+  },
+  "healthy_05": {
+    "label": "healthy",
+    "injected_problem_type": "none"
+  },
+  "label_noise_01": {
+    "label": "problem",
+    "injected_problem_type": "label_noise"
+  },
+  "label_noise_02": {
+    "label": "problem",
+    "injected_problem_type": "label_noise"
+  },
+  "label_noise_03": {
+    "label": "problem",
+    "injected_problem_type": "label_noise"
+  },
+  "lr_high_01": {
+    "label": "problem",
+    "injected_problem_type": "lr_too_high"
+  },
+  "lr_high_02": {
+    "label": "problem",
+    "injected_problem_type": "lr_too_high"
+  },
+  "lr_high_03": {
+    "label": "problem",
+    "injected_problem_type": "lr_too_high"
+  },
+  "lr_low_01": {
+    "label": "problem",
+    "injected_problem_type": "lr_too_low"
+  },
+  "lr_low_02": {
+    "label": "problem",
+    "injected_problem_type": "lr_too_low"
+  },
+  "lr_low_03": {
+    "label": "problem",
+    "injected_problem_type": "lr_too_low"
+  },
+  "overfit_01": {
+    "label": "problem",
+    "injected_problem_type": "overfitting"
+  },
+  "overfit_02": {
+    "label": "problem",
+    "injected_problem_type": "overfitting"
+  },
+  "overfit_03": {
+    "label": "problem",
+    "injected_problem_type": "overfitting"
+  },
+  "vanish_grad_01": {
+    "label": "problem",
+    "injected_problem_type": "vanishing_gradients"
+  },
+  "vanish_grad_02": {
+    "label": "problem",
+    "injected_problem_type": "vanishing_gradients"
+  },
+  "vanish_grad_03": {
+    "label": "problem",
+    "injected_problem_type": "vanishing_gradients"
+  }
+}

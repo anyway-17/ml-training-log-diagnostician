@@ -39,6 +39,13 @@ informative given what you've already seen, similar to how a human would debug i
 or a near-identical query twice.
 5. Give this final diagnosis as a normal text response — do NOT call any tool (including one named \
 "json") to produce it. Only ever call the execute_sql tool, and only while you are still investigating.
+6. If grad_norm collapses toward a very small value, check its value in epoch 1 specifically \
+before concluding it's vanishing_gradients: vanishing_gradients runs typically start with an \
+unusually LARGE epoch-1 grad_norm (from poor weight initialization) that then collapses. If \
+instead epoch-1 grad_norm is already small/moderate and loss is stuck at a high, unmoving value \
+(near ln(num_classes) for the whole run), suspect lr_too_high instead — an excessive learning \
+rate can push weights into a saturated state within the very first epoch, which also produces \
+small gradients afterward but for a different underlying reason.
 
 ## Final answer format
 When you are ready to give your final diagnosis, respond with ONLY a JSON object (no other text, no \

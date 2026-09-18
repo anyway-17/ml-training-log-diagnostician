@@ -2,6 +2,9 @@
 The agent loop: repeatedly calls the LLM with tool access to execute_sql,
 until it produces a final structured diagnosis or hits the call limit.
 """
+import time
+from groq import RateLimitError
+
 import re
 from groq import BadRequestError
 
@@ -63,6 +66,12 @@ def run_diagnosis(run_id: str, verbose: bool = True) -> dict:
                 tools=TOOLS,
                 tool_choice="auto",
             )
+        except RateLimitError as e:
+            wait_s = 5  # small fixed buffer above Groq's suggested wait
+            if verbose:
+                print(f"      (rate limited, waiting {wait_s}s...)")
+            time.sleep(wait_s)
+            continue  # retry the same loop iteration
         except BadRequestError as e:
             # Some models occasionally emit their final answer as a fake tool call
             # (e.g. calling a nonexistent "json" tool) instead of plain text.

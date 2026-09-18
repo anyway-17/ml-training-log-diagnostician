@@ -23,22 +23,26 @@ def create_schema(conn):
 def load_run(conn, record: dict):
     cur = conn.cursor()
 
+    # Strip ground-truth keys out of the config before storing — the agent must never
+    # see these; they only exist because WE know the answer in advance.
+    clean_config = {
+        k: v for k, v in record["config"].items()
+        if k not in ("label", "injected_problem_type", "run_id")
+    }
+
     cur.execute(
         """
-        INSERT OR REPLACE INTO runs (run_id, label, injected_problem_type, config_json, test_acc, created_at)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT OR REPLACE INTO runs (run_id, config_json, test_acc, created_at)
+        VALUES (?, ?, ?, ?)
         """,
         (
             record["run_id"],
-            record["label"],
-            record["injected_problem_type"],
-            json.dumps(record["config"]),
+            json.dumps(clean_config),
             record.get("test_acc"),
             record["created_at"],
         ),
     )
 
-    # Clear any existing epoch rows for this run (in case of re-loading a re-generated run)
     cur.execute("DELETE FROM epochs WHERE run_id = ?", (record["run_id"],))
 
     for e in record["epochs"]:
@@ -48,14 +52,8 @@ def load_run(conn, record: dict):
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
-                record["run_id"],
-                e["epoch"],
-                e["train_loss"],
-                e["val_loss"],
-                e["train_acc"],
-                e["val_acc"],
-                e["grad_norm"],
-                e["learning_rate"],
+                record["run_id"], e["epoch"], e["train_loss"], e["val_loss"],
+                e["train_acc"], e["val_acc"], e["grad_norm"], e["learning_rate"],
             ),
         )
 
@@ -89,6 +87,29 @@ def main():
         for fname, err in skipped:
             print(f"  {fname}: missing {err}")
 
+    build_ground_truth_file()
+
+def build_ground_truth_file():
+    """
+    Writes ground_truth.json — a run_id -> {label, injected_problem_type} lookup,
+    read directly from the raw JSON files. Used ONLY by the evaluation harness in
+    Phase 4, never exposed to the agent's SQL tool.
+    """
+    ground_truth = {}
+    for fname in sorted(os.listdir(RAW_DIR)):
+        if not fname.endswith(".json") or fname == "test_run.json":
+            continue
+        with open(os.path.join(RAW_DIR, fname), "r") as f:
+            record = json.load(f)
+        ground_truth[record["run_id"]] = {
+            "label": record["label"],
+            "injected_problem_type": record["injected_problem_type"],
+        }
+
+    with open("ground_truth.json", "w") as f:
+        json.dump(ground_truth, f, indent=2)
+    print(f"Wrote ground_truth.json with {len(ground_truth)} entries")
 
 if __name__ == "__main__":
     main()
+    
