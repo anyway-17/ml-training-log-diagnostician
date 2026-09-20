@@ -9,10 +9,13 @@ Usage:
 import json
 import os
 import sqlite3
+import time
 
-RAW_DIR = "../data_generation/raw"
-DB_PATH = "training_logs.db"
-SCHEMA_PATH = "schema.sql"
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+
+RAW_DIR = os.path.join(_THIS_DIR, "..", "data_generation", "raw")
+DB_PATH = os.path.join(_THIS_DIR, "training_logs.db")
+SCHEMA_PATH = os.path.join(_THIS_DIR, "schema.sql")
 
 
 def create_schema(conn):
@@ -57,6 +60,56 @@ def load_run(conn, record: dict):
             ),
         )
 
+
+def load_and_diagnose_single_run(run_json_path: str):
+    """
+    Loads a single run's JSON file into the database, then immediately
+    triggers the diagnostician agent on it (auto-triggering, no human involved).
+    Called automatically by train_baseline.py right after training finishes.
+    """
+    import sys
+    sys.path.append("../agent")
+
+    with open(run_json_path, "r") as f:
+        record = json.load(f)
+
+    conn = sqlite3.connect(DB_PATH)
+    create_schema(conn)
+    load_run(conn, record)
+    conn.commit()
+    conn.close()
+
+    print(f"[{record['run_id']}] loaded into database, running automatic diagnosis...")
+
+    from agent_loop import run_diagnosis
+    diagnosis = run_diagnosis(record["run_id"], verbose=False)
+
+    # Save the diagnosis itself into the diagnoses table
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute(
+        """
+        INSERT INTO diagnoses (run_id, problem_detected, diagnosis, confidence, evidence, tool_calls_used, diagnosed_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            record["run_id"],
+            1 if diagnosis.get("problem_detected") else 0,
+            diagnosis.get("diagnosis"),
+            diagnosis.get("confidence"),
+            diagnosis.get("evidence"),
+            diagnosis.get("tool_calls_used"),
+            time.strftime("%Y-%m-%d %H:%M:%S"),
+        ),
+    )
+    conn.commit()
+    conn.close()
+
+    print(f"[{record['run_id']}] DIAGNOSIS: {diagnosis.get('diagnosis')} "
+          f"(confidence: {diagnosis.get('confidence')})")
+    if diagnosis.get("problem_detected"):
+        print(f"  ⚠ PROBLEM DETECTED: {diagnosis.get('evidence')}")
+
+    return diagnosis
 
 def main():
     conn = sqlite3.connect(DB_PATH)

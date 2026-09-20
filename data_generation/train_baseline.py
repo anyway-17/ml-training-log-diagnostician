@@ -208,6 +208,12 @@ def save_run(args, epoch_logs, test_acc):
     out_path = os.path.join(args.output_dir, f"{args.run_id}.json")
     with open(out_path, "w") as f:
         json.dump(run_record, f, indent=2)
+    # Auto-trigger: immediately diagnose this run, no human involved.
+    if args.auto_diagnose:
+        import sys
+        sys.path.append("../database")
+        from load_runs import load_and_diagnose_single_run
+        load_and_diagnose_single_run(out_path)
 
     print(f"[{args.run_id}] saved run log to {out_path}")
 
@@ -234,6 +240,9 @@ def parse_args():
     p.add_argument("--init_scheme", type=str, default="default", choices=["default", "bad"], help="Bad init for vanishing-gradient injection")
     p.add_argument("--output_dir", type=str, default="../data_generation/raw")
     p.add_argument("--dropout_rate", type=float, default=0.25)
+
+    p.add_argument("--auto_diagnose", action="store_true",
+                    help="Automatically load this run and run the diagnostician agent immediately after training.")
 
     return p.parse_args()
 

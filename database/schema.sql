@@ -19,3 +19,17 @@ CREATE TABLE IF NOT EXISTS epochs (
 );
 
 CREATE INDEX IF NOT EXISTS idx_epochs_run_id ON epochs(run_id);
+
+CREATE TABLE IF NOT EXISTS diagnoses (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    run_id             TEXT NOT NULL,
+    problem_detected   INTEGER,   -- 0 or 1
+    diagnosis          TEXT,
+    confidence         TEXT,
+    evidence           TEXT,
+    tool_calls_used    INTEGER,
+    diagnosed_at       TEXT NOT NULL,
+    FOREIGN KEY (run_id) REFERENCES runs(run_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_diagnoses_run_id ON diagnoses(run_id);
