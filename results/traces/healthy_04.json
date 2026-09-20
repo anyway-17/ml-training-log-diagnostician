@@ -1,7 +1,7 @@
 {
   "problem_detected": false,
   "diagnosis": "healthy",
-  "evidence": "Training and validation accuracy both improve steadily with a small gap (<0.03) and loss decreases throughout. Gradients remain moderate and do not collapse, indicating stable learning.",
+  "evidence": "Train and validation accuracy stay close (max gap ~0.02) and both improve smoothly; validation loss is low and stable. Grad_norm declines modestly but remains sizable, indicating stable gradients. Final val_acc (0.9235) and test_acc (0.9188) rank among the top runs in the database.",
   "confidence": "high",
   "run_id": "healthy_04",
   "query_history": [
@@ -120,7 +120,135 @@
           ]
         ]
       }
+    },
+    {
+      "query": "SELECT r.run_id, MAX(e.val_acc) as final_val_acc, r.test_acc FROM runs r JOIN epochs e ON r.run_id = e.run_id GROUP BY r.run_id ORDER BY final_val_acc DESC;",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "final_val_acc",
+          "test_acc"
+        ],
+        "rows": [
+          [
+            "healthy_05",
+            0.926833,
+            0.9159
+          ],
+          [
+            "healthy_02",
+            0.925833,
+            0.9149
+          ],
+          [
+            "healthy_04",
+            0.9235,
+            0.9188
+          ],
+          [
+            "healthy_01",
+            0.9215,
+            0.9199
+          ],
+          [
+            "healthy_03",
+            0.92,
+            0.9182
+          ],
+          [
+            "frozen_layer_03",
+            0.901667,
+            0.8922
+          ],
+          [
+            "frozen_layer_02",
+            0.896167,
+            0.888
+          ],
+          [
+            "frozen_layer_01",
+            0.892667,
+            0.8832
+          ],
+          [
+            "lr_low_03",
+            0.853833,
+            0.8498
+          ],
+          [
+            "overfit_03",
+            0.853833,
+            0.8484
+          ],
+          [
+            "overfit_01",
+            0.847833,
+            0.8403
+          ],
+          [
+            "overfit_02",
+            0.8435,
+            0.8296
+          ],
+          [
+            "lr_low_01",
+            0.82,
+            0.8137
+          ],
+          [
+            "lr_low_02",
+            0.785167,
+            0.7838
+          ],
+          [
+            "vanish_grad_02",
+            0.701,
+            0.1746
+          ],
+          [
+            "vanish_grad_01",
+            0.690333,
+            0.1352
+          ],
+          [
+            "vanish_grad_03",
+            0.683833,
+            0.1365
+          ],
+          [
+            "label_noise_01",
+            0.634333,
+            0.8978
+          ],
+          [
+            "label_noise_02",
+            0.536667,
+            0.8898
+          ],
+          [
+            "label_noise_03",
+            0.456333,
+            0.8749
+          ],
+          [
+            "lr_high_01",
+            0.11,
+            0.1
+          ],
+          [
+            "lr_high_02",
+            0.107667,
+            0.1
+          ],
+          [
+            "lr_high_03",
+            0.104333,
+            0.1
+          ]
+        ]
+      }
     }
   ],
-  "tool_calls_used": 2
+  "tool_calls_used": 3
 }

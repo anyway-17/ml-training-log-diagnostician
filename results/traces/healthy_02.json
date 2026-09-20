@@ -1,12 +1,12 @@
 {
   "problem_detected": false,
   "diagnosis": "healthy",
-  "evidence": "Training and validation accuracy both increase together, with a small gap (<3%) throughout 10 epochs. Losses decrease smoothly and grad_norm stays moderate (~1.2-2.0) without collapsing, indicating stable learning and no overfitting, vanishing gradients, or learning\u2011rate issues.",
+  "evidence": "Training and validation loss steadily decrease, accuracies improve and stay close (train/val gap < 2%). Gradient norms remain moderate without collapse. Test accuracy (0.9149) ranks among the top healthy runs.",
   "confidence": "high",
   "run_id": "healthy_02",
   "query_history": [
     {
-      "query": "SELECT * FROM runs WHERE run_id = 'healthy_02'",
+      "query": "SELECT * FROM runs WHERE run_id = 'healthy_02';",
       "result": {
         "success": true,
         "columns": [
@@ -26,101 +26,153 @@
       }
     },
     {
-      "query": "SELECT epoch, train_acc, val_acc, train_loss, val_loss, grad_norm FROM epochs WHERE run_id = 'healthy_02' ORDER BY epoch",
+      "query": "SELECT epoch, train_loss, val_loss, train_acc, val_acc, grad_norm FROM epochs WHERE run_id = 'healthy_02' ORDER BY epoch;",
       "result": {
         "success": true,
         "columns": [
           "epoch",
-          "train_acc",
-          "val_acc",
           "train_loss",
           "val_loss",
+          "train_acc",
+          "val_acc",
           "grad_norm"
         ],
         "rows": [
           [
             1,
-            0.808278,
-            0.874833,
             0.52616,
             0.333754,
+            0.808278,
+            0.874833,
             2.038756
           ],
           [
             2,
-            0.876222,
-            0.896667,
             0.341284,
             0.279013,
+            0.876222,
+            0.896667,
             1.663657
           ],
           [
             3,
-            0.892444,
-            0.903833,
             0.296348,
             0.251435,
+            0.892444,
+            0.903833,
             1.516135
           ],
           [
             4,
-            0.904463,
-            0.91,
             0.263297,
             0.233044,
+            0.904463,
+            0.91,
             1.420254
           ],
           [
             5,
-            0.911759,
-            0.91,
             0.242638,
             0.232138,
+            0.911759,
+            0.91,
             1.350595
           ],
           [
             6,
-            0.919278,
-            0.92,
             0.220295,
             0.213134,
+            0.919278,
+            0.92,
             1.301937
           ],
           [
             7,
-            0.925593,
-            0.922333,
             0.203672,
             0.207455,
+            0.925593,
+            0.922333,
             1.30394
           ],
           [
             8,
-            0.931056,
-            0.922833,
             0.185757,
             0.207504,
+            0.931056,
+            0.922833,
             1.292357
           ],
           [
             9,
-            0.936093,
-            0.922167,
             0.172697,
             0.201303,
+            0.936093,
+            0.922167,
             1.269245
           ],
           [
             10,
-            0.939648,
-            0.925833,
             0.16042,
             0.204074,
+            0.939648,
+            0.925833,
             1.273844
+          ]
+        ]
+      }
+    },
+    {
+      "query": "SELECT run_id, test_acc FROM runs ORDER BY test_acc DESC LIMIT 10;",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "test_acc"
+        ],
+        "rows": [
+          [
+            "healthy_01",
+            0.9199
+          ],
+          [
+            "healthy_04",
+            0.9188
+          ],
+          [
+            "healthy_03",
+            0.9182
+          ],
+          [
+            "healthy_05",
+            0.9159
+          ],
+          [
+            "healthy_02",
+            0.9149
+          ],
+          [
+            "label_noise_01",
+            0.8978
+          ],
+          [
+            "frozen_layer_03",
+            0.8922
+          ],
+          [
+            "label_noise_02",
+            0.8898
+          ],
+          [
+            "frozen_layer_02",
+            0.888
+          ],
+          [
+            "frozen_layer_01",
+            0.8832
           ]
         ]
       }
     }
   ],
-  "tool_calls_used": 2
+  "tool_calls_used": 3
 }

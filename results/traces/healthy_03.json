@@ -1,32 +1,12 @@
 {
   "problem_detected": false,
   "diagnosis": "healthy",
-  "evidence": "Training and validation accuracy both improve steadily, with a small ~2-3% gap and low, decreasing loss. Gradient norms remain moderate (~1.3-2) without collapse, and the learning rate of 0.001 yields stable progress.",
+  "evidence": "Train and validation loss both decrease steadily, with validation accuracy staying within ~0.05 of training accuracy throughout. Gradient norms remain moderate (~2 down to ~1.3) and test accuracy (0.9182) ranks among the top runs, comparable to other healthy runs.",
   "confidence": "high",
   "run_id": "healthy_03",
   "query_history": [
     {
-      "query": "SELECT * FROM runs WHERE run_id = 'healthy_03';",
-      "result": {
-        "success": true,
-        "columns": [
-          "run_id",
-          "config_json",
-          "test_acc",
-          "created_at"
-        ],
-        "rows": [
-          [
-            "healthy_03",
-            "{\"epochs\": 10, \"batch_size\": 64, \"lr\": 0.001, \"weight_decay\": 0.0, \"seed\": 3, \"train_subset_frac\": 1.0, \"label_noise_frac\": 0.0, \"freeze_conv1\": false, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\"}",
-            0.9182,
-            "2026-08-23 17:17:20"
-          ]
-        ]
-      }
-    },
-    {
-      "query": "SELECT epoch, train_loss, val_loss, train_acc, val_acc, grad_norm FROM epochs WHERE run_id = 'healthy_03' ORDER BY epoch;",
+      "query": "SELECT epoch, train_loss, val_loss, train_acc, val_acc, grad_norm FROM epochs WHERE run_id = 'healthy_03' ORDER BY epoch",
       "result": {
         "success": true,
         "columns": [
@@ -117,6 +97,110 @@
             0.944852,
             0.919,
             1.300337
+          ]
+        ]
+      }
+    },
+    {
+      "query": "SELECT run_id, test_acc FROM runs ORDER BY test_acc DESC",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "test_acc"
+        ],
+        "rows": [
+          [
+            "healthy_01",
+            0.9199
+          ],
+          [
+            "healthy_04",
+            0.9188
+          ],
+          [
+            "healthy_03",
+            0.9182
+          ],
+          [
+            "healthy_05",
+            0.9159
+          ],
+          [
+            "healthy_02",
+            0.9149
+          ],
+          [
+            "label_noise_01",
+            0.8978
+          ],
+          [
+            "frozen_layer_03",
+            0.8922
+          ],
+          [
+            "label_noise_02",
+            0.8898
+          ],
+          [
+            "frozen_layer_02",
+            0.888
+          ],
+          [
+            "frozen_layer_01",
+            0.8832
+          ],
+          [
+            "label_noise_03",
+            0.8749
+          ],
+          [
+            "lr_low_03",
+            0.8498
+          ],
+          [
+            "overfit_03",
+            0.8484
+          ],
+          [
+            "overfit_01",
+            0.8403
+          ],
+          [
+            "overfit_02",
+            0.8296
+          ],
+          [
+            "lr_low_01",
+            0.8137
+          ],
+          [
+            "lr_low_02",
+            0.7838
+          ],
+          [
+            "vanish_grad_02",
+            0.1746
+          ],
+          [
+            "vanish_grad_03",
+            0.1365
+          ],
+          [
+            "vanish_grad_01",
+            0.1352
+          ],
+          [
+            "lr_high_01",
+            0.1
+          ],
+          [
+            "lr_high_02",
+            0.1
+          ],
+          [
+            "lr_high_03",
+            0.1
           ]
         ]
       }

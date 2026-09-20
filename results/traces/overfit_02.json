@@ -1,32 +1,12 @@
 {
   "problem_detected": true,
   "diagnosis": "overfitting",
-  "evidence": "Training accuracy rises to ~0.96 while validation accuracy plateaus around 0.84 and even slightly declines after epoch 20, creating a growing train\u2011val gap (~0.13). Training loss keeps decreasing whereas validation loss stagnates around 0.5, a classic sign of overfitting.",
+  "evidence": "Training accuracy climbs to ~0.96 while validation accuracy stalls around ~0.84, creating a ~0.12 gap. Test accuracy (0.8296) is well below the healthy cluster (~0.915) despite low training loss, indicating the model has memorized the training data.",
   "confidence": "high",
   "run_id": "overfit_02",
   "query_history": [
     {
-      "query": "SELECT * FROM runs WHERE run_id = 'overfit_02';",
-      "result": {
-        "success": true,
-        "columns": [
-          "run_id",
-          "config_json",
-          "test_acc",
-          "created_at"
-        ],
-        "rows": [
-          [
-            "overfit_02",
-            "{\"epochs\": 30, \"batch_size\": 64, \"lr\": 0.001, \"weight_decay\": 0.0, \"seed\": 2, \"train_subset_frac\": 0.02, \"label_noise_frac\": 0.0, \"freeze_conv1\": false, \"freeze_conv2\": false, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\", \"dropout_rate\": 0.0}",
-            0.8296,
-            "2026-09-16 11:35:08"
-          ]
-        ]
-      }
-    },
-    {
-      "query": "SELECT epoch, train_acc, val_acc, train_loss, val_loss, grad_norm FROM epochs WHERE run_id = 'overfit_02' ORDER BY epoch;",
+      "query": "SELECT epoch, train_acc, val_acc, train_loss, val_loss, grad_norm FROM epochs WHERE run_id = 'overfit_02' ORDER BY epoch",
       "result": {
         "success": true,
         "columns": [
@@ -277,6 +257,110 @@
             0.118762,
             0.556166,
             2.038821
+          ]
+        ]
+      }
+    },
+    {
+      "query": "SELECT run_id, test_acc FROM runs",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "test_acc"
+        ],
+        "rows": [
+          [
+            "frozen_layer_01",
+            0.8832
+          ],
+          [
+            "frozen_layer_02",
+            0.888
+          ],
+          [
+            "frozen_layer_03",
+            0.8922
+          ],
+          [
+            "healthy_01",
+            0.9199
+          ],
+          [
+            "healthy_02",
+            0.9149
+          ],
+          [
+            "healthy_03",
+            0.9182
+          ],
+          [
+            "healthy_04",
+            0.9188
+          ],
+          [
+            "healthy_05",
+            0.9159
+          ],
+          [
+            "label_noise_01",
+            0.8978
+          ],
+          [
+            "label_noise_02",
+            0.8898
+          ],
+          [
+            "label_noise_03",
+            0.8749
+          ],
+          [
+            "lr_high_01",
+            0.1
+          ],
+          [
+            "lr_high_02",
+            0.1
+          ],
+          [
+            "lr_high_03",
+            0.1
+          ],
+          [
+            "lr_low_01",
+            0.8137
+          ],
+          [
+            "lr_low_02",
+            0.7838
+          ],
+          [
+            "lr_low_03",
+            0.8498
+          ],
+          [
+            "overfit_01",
+            0.8403
+          ],
+          [
+            "overfit_02",
+            0.8296
+          ],
+          [
+            "overfit_03",
+            0.8484
+          ],
+          [
+            "vanish_grad_01",
+            0.1352
+          ],
+          [
+            "vanish_grad_02",
+            0.1746
+          ],
+          [
+            "vanish_grad_03",
+            0.1365
           ]
         ]
       }

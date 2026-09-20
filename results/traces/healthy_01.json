@@ -1,42 +1,22 @@
 {
   "problem_detected": false,
   "diagnosis": "healthy",
-  "evidence": "Training and validation accuracy both increase steadily and stay within a few percent of each other, with loss decreasing and gradient norms remaining moderate throughout the 10 epochs. No large train/val gap, no loss plateau, and configuration shows no label noise or frozen layers.",
+  "evidence": "Train and validation loss both steadily decrease, and accuracy improves with a small train\u2011val gap (<0.03). Gradient norms stay moderate and do not collapse. The final test accuracy (0.9199) is the highest among all runs, indicating no issue.",
   "confidence": "high",
   "run_id": "healthy_01",
   "query_history": [
-    {
-      "query": "SELECT run_id, train_acc, val_acc, test_acc, final_loss FROM runs WHERE run_id = 'healthy_01';",
-      "result": {
-        "success": false,
-        "error": "SQL error: no such column: train_acc"
-      }
-    },
-    {
-      "query": "SELECT * FROM runs WHERE run_id = 'healthy_01' LIMIT 5;",
-      "result": {
-        "success": true,
-        "columns": [
-          "run_id",
-          "config_json",
-          "test_acc",
-          "created_at"
-        ],
-        "rows": [
-          [
-            "healthy_01",
-            "{\"epochs\": 10, \"batch_size\": 64, \"lr\": 0.001, \"weight_decay\": 0.0, \"seed\": 1, \"train_subset_frac\": 1.0, \"label_noise_frac\": 0.0, \"freeze_conv1\": false, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\"}",
-            0.9199,
-            "2026-08-23 17:11:03"
-          ]
-        ]
-      }
-    },
     {
       "query": "SELECT epoch, train_acc, val_acc, loss, grad_norm FROM epochs WHERE run_id = 'healthy_01' ORDER BY epoch;",
       "result": {
         "success": false,
         "error": "SQL error: no such column: loss"
+      }
+    },
+    {
+      "query": "PRAGMA table_info('epochs');",
+      "result": {
+        "success": false,
+        "error": "Query rejected: Only SELECT statements are allowed."
       }
     },
     {
@@ -68,101 +48,249 @@
       }
     },
     {
-      "query": "SELECT epoch, train_acc, val_acc, train_loss, val_loss, grad_norm FROM epochs WHERE run_id = 'healthy_01' ORDER BY epoch;",
+      "query": "SELECT epoch, train_loss, val_loss, train_acc, val_acc, grad_norm FROM epochs WHERE run_id = 'healthy_01' ORDER BY epoch;",
       "result": {
         "success": true,
         "columns": [
           "epoch",
-          "train_acc",
-          "val_acc",
           "train_loss",
           "val_loss",
+          "train_acc",
+          "val_acc",
           "grad_norm"
         ],
         "rows": [
           [
             1,
-            0.805981,
-            0.869333,
             0.531943,
             0.340542,
+            0.805981,
+            0.869333,
             2.109141
           ],
           [
             2,
-            0.877944,
-            0.891333,
             0.341033,
             0.290547,
+            0.877944,
+            0.891333,
             1.758329
           ],
           [
             3,
-            0.892889,
-            0.903833,
             0.295932,
             0.25758,
+            0.892889,
+            0.903833,
             1.600053
           ],
           [
             4,
-            0.905074,
-            0.901667,
             0.263332,
             0.259825,
+            0.905074,
+            0.901667,
             1.506718
           ],
           [
             5,
-            0.913537,
-            0.914667,
             0.237005,
             0.231898,
+            0.913537,
+            0.914667,
             1.464883
           ],
           [
             6,
-            0.919685,
-            0.915333,
             0.218065,
             0.223465,
+            0.919685,
+            0.915333,
             1.488594
           ],
           [
             7,
-            0.925685,
-            0.914,
             0.200436,
             0.227547,
+            0.925685,
+            0.914,
             1.436187
           ],
           [
             8,
-            0.930741,
-            0.9135,
             0.18578,
             0.243684,
+            0.930741,
+            0.9135,
             1.41617
           ],
           [
             9,
-            0.937093,
-            0.916667,
             0.16947,
             0.227491,
+            0.937093,
+            0.916667,
             1.372283
           ],
           [
             10,
-            0.942296,
-            0.9215,
             0.155771,
             0.220906,
+            0.942296,
+            0.9215,
             1.391649
+          ]
+        ]
+      }
+    },
+    {
+      "query": "SELECT * FROM runs LIMIT 5;",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "config_json",
+          "test_acc",
+          "created_at"
+        ],
+        "rows": [
+          [
+            "frozen_layer_01",
+            "{\"epochs\": 10, \"batch_size\": 64, \"lr\": 0.001, \"weight_decay\": 0.0, \"seed\": 1, \"train_subset_frac\": 1.0, \"label_noise_frac\": 0.0, \"freeze_conv1\": true, \"freeze_conv2\": true, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\", \"dropout_rate\": 0.25}",
+            0.8832,
+            "2026-08-25 23:54:33"
+          ],
+          [
+            "frozen_layer_02",
+            "{\"epochs\": 10, \"batch_size\": 64, \"lr\": 0.001, \"weight_decay\": 0.0, \"seed\": 2, \"train_subset_frac\": 1.0, \"label_noise_frac\": 0.0, \"freeze_conv1\": true, \"freeze_conv2\": true, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\", \"dropout_rate\": 0.25}",
+            0.888,
+            "2026-08-25 23:56:53"
+          ],
+          [
+            "frozen_layer_03",
+            "{\"epochs\": 10, \"batch_size\": 64, \"lr\": 0.001, \"weight_decay\": 0.0, \"seed\": 3, \"train_subset_frac\": 1.0, \"label_noise_frac\": 0.0, \"freeze_conv1\": true, \"freeze_conv2\": true, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\", \"dropout_rate\": 0.25}",
+            0.8922,
+            "2026-08-25 23:59:11"
+          ],
+          [
+            "healthy_01",
+            "{\"epochs\": 10, \"batch_size\": 64, \"lr\": 0.001, \"weight_decay\": 0.0, \"seed\": 1, \"train_subset_frac\": 1.0, \"label_noise_frac\": 0.0, \"freeze_conv1\": false, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\"}",
+            0.9199,
+            "2026-08-23 17:11:03"
+          ],
+          [
+            "healthy_02",
+            "{\"epochs\": 10, \"batch_size\": 64, \"lr\": 0.001, \"weight_decay\": 0.0, \"seed\": 2, \"train_subset_frac\": 1.0, \"label_noise_frac\": 0.0, \"freeze_conv1\": false, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\"}",
+            0.9149,
+            "2026-08-23 17:14:13"
+          ]
+        ]
+      }
+    },
+    {
+      "query": "SELECT run_id, test_acc FROM runs ORDER BY test_acc DESC;",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "test_acc"
+        ],
+        "rows": [
+          [
+            "healthy_01",
+            0.9199
+          ],
+          [
+            "healthy_04",
+            0.9188
+          ],
+          [
+            "healthy_03",
+            0.9182
+          ],
+          [
+            "healthy_05",
+            0.9159
+          ],
+          [
+            "healthy_02",
+            0.9149
+          ],
+          [
+            "label_noise_01",
+            0.8978
+          ],
+          [
+            "frozen_layer_03",
+            0.8922
+          ],
+          [
+            "label_noise_02",
+            0.8898
+          ],
+          [
+            "frozen_layer_02",
+            0.888
+          ],
+          [
+            "frozen_layer_01",
+            0.8832
+          ],
+          [
+            "label_noise_03",
+            0.8749
+          ],
+          [
+            "lr_low_03",
+            0.8498
+          ],
+          [
+            "overfit_03",
+            0.8484
+          ],
+          [
+            "overfit_01",
+            0.8403
+          ],
+          [
+            "overfit_02",
+            0.8296
+          ],
+          [
+            "lr_low_01",
+            0.8137
+          ],
+          [
+            "lr_low_02",
+            0.7838
+          ],
+          [
+            "vanish_grad_02",
+            0.1746
+          ],
+          [
+            "vanish_grad_03",
+            0.1365
+          ],
+          [
+            "vanish_grad_01",
+            0.1352
+          ],
+          [
+            "lr_high_01",
+            0.1
+          ],
+          [
+            "lr_high_02",
+            0.1
+          ],
+          [
+            "lr_high_03",
+            0.1
           ]
         ]
       }
     }
   ],
-  "tool_calls_used": 5
+  "tool_calls_used": 6
 }

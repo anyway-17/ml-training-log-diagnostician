@@ -1,12 +1,19 @@
 {
   "problem_detected": true,
   "diagnosis": "label_noise",
-  "evidence": "The run was configured with 50% label noise. Training and validation accuracies stay low (\u22480.45) and loss plateaus early, indicating the model cannot learn the true patterns from the corrupted labels. The gap between train and val metrics is small, ruling out overfitting, and the learning rate is typical, so label noise is the primary issue.",
+  "evidence": "The run has a 0.5 label noise fraction and its final test accuracy (0.8749) is noticeably lower than the healthy runs (~0.915) and lower than other label-noise runs, while train and validation accuracies remain close, indicating the model cannot learn due to noisy labels. Gradients are stable and loss decreases modestly, ruling out learning-rate or gradient issues.",
   "confidence": "high",
   "run_id": "label_noise_03",
   "query_history": [
     {
-      "query": "SELECT * FROM runs WHERE run_id = 'label_noise_03';",
+      "query": "SELECT run_id, hyperparameters, final_test_acc FROM runs WHERE run_id = 'label_noise_03';",
+      "result": {
+        "success": false,
+        "error": "SQL error: no such column: hyperparameters"
+      }
+    },
+    {
+      "query": "SELECT * FROM runs LIMIT 1;",
       "result": {
         "success": true,
         "columns": [
@@ -17,10 +24,132 @@
         ],
         "rows": [
           [
+            "frozen_layer_01",
+            "{\"epochs\": 10, \"batch_size\": 64, \"lr\": 0.001, \"weight_decay\": 0.0, \"seed\": 1, \"train_subset_frac\": 1.0, \"label_noise_frac\": 0.0, \"freeze_conv1\": true, \"freeze_conv2\": true, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\", \"dropout_rate\": 0.25}",
+            0.8832,
+            "2026-08-25 23:54:33"
+          ]
+        ]
+      }
+    },
+    {
+      "query": "SELECT run_id, config_json, test_acc FROM runs WHERE run_id = 'label_noise_03';",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "config_json",
+          "test_acc"
+        ],
+        "rows": [
+          [
             "label_noise_03",
             "{\"epochs\": 10, \"batch_size\": 64, \"lr\": 0.001, \"weight_decay\": 0.0, \"seed\": 3, \"train_subset_frac\": 1.0, \"label_noise_frac\": 0.5, \"freeze_conv1\": false, \"freeze_conv2\": false, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\", \"dropout_rate\": 0.25}",
-            0.8749,
-            "2026-08-25 23:52:14"
+            0.8749
+          ]
+        ]
+      }
+    },
+    {
+      "query": "SELECT run_id, test_acc FROM runs ORDER BY test_acc DESC;",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "test_acc"
+        ],
+        "rows": [
+          [
+            "healthy_01",
+            0.9199
+          ],
+          [
+            "healthy_04",
+            0.9188
+          ],
+          [
+            "healthy_03",
+            0.9182
+          ],
+          [
+            "healthy_05",
+            0.9159
+          ],
+          [
+            "healthy_02",
+            0.9149
+          ],
+          [
+            "label_noise_01",
+            0.8978
+          ],
+          [
+            "frozen_layer_03",
+            0.8922
+          ],
+          [
+            "label_noise_02",
+            0.8898
+          ],
+          [
+            "frozen_layer_02",
+            0.888
+          ],
+          [
+            "frozen_layer_01",
+            0.8832
+          ],
+          [
+            "label_noise_03",
+            0.8749
+          ],
+          [
+            "lr_low_03",
+            0.8498
+          ],
+          [
+            "overfit_03",
+            0.8484
+          ],
+          [
+            "overfit_01",
+            0.8403
+          ],
+          [
+            "overfit_02",
+            0.8296
+          ],
+          [
+            "lr_low_01",
+            0.8137
+          ],
+          [
+            "lr_low_02",
+            0.7838
+          ],
+          [
+            "vanish_grad_02",
+            0.1746
+          ],
+          [
+            "vanish_grad_03",
+            0.1365
+          ],
+          [
+            "vanish_grad_01",
+            0.1352
+          ],
+          [
+            "lr_high_01",
+            0.1
+          ],
+          [
+            "lr_high_02",
+            0.1
+          ],
+          [
+            "lr_high_03",
+            0.1
           ]
         ]
       }
@@ -109,7 +238,59 @@
           ]
         ]
       }
+    },
+    {
+      "query": "SELECT epoch, grad_norm FROM epochs WHERE run_id = 'label_noise_03' ORDER BY epoch;",
+      "result": {
+        "success": true,
+        "columns": [
+          "epoch",
+          "grad_norm"
+        ],
+        "rows": [
+          [
+            1,
+            0.970169
+          ],
+          [
+            2,
+            0.901216
+          ],
+          [
+            3,
+            0.873423
+          ],
+          [
+            4,
+            0.868135
+          ],
+          [
+            5,
+            0.869112
+          ],
+          [
+            6,
+            0.887885
+          ],
+          [
+            7,
+            0.931739
+          ],
+          [
+            8,
+            0.9773
+          ],
+          [
+            9,
+            1.045216
+          ],
+          [
+            10,
+            1.119705
+          ]
+        ]
+      }
     }
   ],
-  "tool_calls_used": 2
+  "tool_calls_used": 6
 }

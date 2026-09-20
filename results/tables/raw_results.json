@@ -3,31 +3,31 @@
     "run_id": "frozen_layer_01",
     "true_label": "problem",
     "true_problem_type": "frozen_layer",
-    "predicted_problem_detected": false,
-    "predicted_diagnosis": "healthy",
-    "confidence": "high",
-    "evidence": "Training and validation accuracy progress together with small gap, loss steadily decreasing, and stable gradient norms. No signs of overfitting, learning rate issues, vanishing gradients, label noise, or frozen-layer impact on performance.",
-    "tool_calls_used": 5
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "frozen_layer",
+    "confidence": "medium",
+    "evidence": "The run shows smooth loss reduction, stable gradient norms, and minimal train/validation accuracy gap, but its final test accuracy (0.883) is noticeably lower than the healthy cluster (~0.915) and comparable to other problematic runs. This performance drop without signs of overfitting or learning\u2011rate issues suggests some model parameters were not being updated.",
+    "tool_calls_used": 7
   },
   {
     "run_id": "frozen_layer_02",
     "true_label": "problem",
     "true_problem_type": "frozen_layer",
-    "predicted_problem_detected": false,
-    "predicted_diagnosis": "healthy",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "frozen_layer",
     "confidence": "high",
-    "evidence": "Training loss steadily decreased and both training and validation accuracy improved together, with a small and stable accuracy gap. Gradient norms remained moderate without collapse, and final test accuracy is high, indicating no overfitting, learning\u2011rate, or gradient issues.",
+    "evidence": "The run freezes the first two convolutional layers and achieves a test accuracy (0.888) noticeably below the top healthy runs (~0.92) despite small train/validation gaps and stable gradient norms, indicating reduced learning capacity from frozen layers.",
     "tool_calls_used": 6
   },
   {
     "run_id": "frozen_layer_03",
     "true_label": "problem",
     "true_problem_type": "frozen_layer",
-    "predicted_problem_detected": false,
-    "predicted_diagnosis": "healthy",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "frozen_layer",
     "confidence": "high",
-    "evidence": "Training and validation accuracy improve together with a small gap, losses decrease steadily, and gradient norms show normal decay. No stagnation, overfitting, or abnormal gradient behavior is observed.",
-    "tool_calls_used": 2
+    "evidence": "The run's test accuracy (0.892) ranks below all healthy runs (\u22480.915\u20110.92) and even below label-noise runs, indicating a performance deficit. Training and validation accuracies are close with a small gap and gradients remain healthy, suggesting the model is not overfitting or suffering gradient issues. The config explicitly freezes early convolutional layers, which likely limits representational capacity and explains the lower final accuracy.",
+    "tool_calls_used": 3
   },
   {
     "run_id": "healthy_01",
@@ -36,8 +36,8 @@
     "predicted_problem_detected": false,
     "predicted_diagnosis": "healthy",
     "confidence": "high",
-    "evidence": "Training and validation accuracy both increase steadily and stay within a few percent of each other, with loss decreasing and gradient norms remaining moderate throughout the 10 epochs. No large train/val gap, no loss plateau, and configuration shows no label noise or frozen layers.",
-    "tool_calls_used": 5
+    "evidence": "Train and validation loss both steadily decrease, and accuracy improves with a small train\u2011val gap (<0.03). Gradient norms stay moderate and do not collapse. The final test accuracy (0.9199) is the highest among all runs, indicating no issue.",
+    "tool_calls_used": 6
   },
   {
     "run_id": "healthy_02",
@@ -46,8 +46,8 @@
     "predicted_problem_detected": false,
     "predicted_diagnosis": "healthy",
     "confidence": "high",
-    "evidence": "Training and validation accuracy both increase together, with a small gap (<3%) throughout 10 epochs. Losses decrease smoothly and grad_norm stays moderate (~1.2-2.0) without collapsing, indicating stable learning and no overfitting, vanishing gradients, or learning\u2011rate issues.",
-    "tool_calls_used": 2
+    "evidence": "Training and validation loss steadily decrease, accuracies improve and stay close (train/val gap < 2%). Gradient norms remain moderate without collapse. Test accuracy (0.9149) ranks among the top healthy runs.",
+    "tool_calls_used": 3
   },
   {
     "run_id": "healthy_03",
@@ -56,7 +56,7 @@
     "predicted_problem_detected": false,
     "predicted_diagnosis": "healthy",
     "confidence": "high",
-    "evidence": "Training and validation accuracy both improve steadily, with a small ~2-3% gap and low, decreasing loss. Gradient norms remain moderate (~1.3-2) without collapse, and the learning rate of 0.001 yields stable progress.",
+    "evidence": "Train and validation loss both decrease steadily, with validation accuracy staying within ~0.05 of training accuracy throughout. Gradient norms remain moderate (~2 down to ~1.3) and test accuracy (0.9182) ranks among the top runs, comparable to other healthy runs.",
     "tool_calls_used": 2
   },
   {
@@ -66,8 +66,8 @@
     "predicted_problem_detected": false,
     "predicted_diagnosis": "healthy",
     "confidence": "high",
-    "evidence": "Training and validation accuracy both improve steadily with a small gap (<0.03) and loss decreases throughout. Gradients remain moderate and do not collapse, indicating stable learning.",
-    "tool_calls_used": 2
+    "evidence": "Train and validation accuracy stay close (max gap ~0.02) and both improve smoothly; validation loss is low and stable. Grad_norm declines modestly but remains sizable, indicating stable gradients. Final val_acc (0.9235) and test_acc (0.9188) rank among the top runs in the database.",
+    "tool_calls_used": 3
   },
   {
     "run_id": "healthy_05",
@@ -76,8 +76,8 @@
     "predicted_problem_detected": false,
     "predicted_diagnosis": "healthy",
     "confidence": "high",
-    "evidence": "Training and validation loss steadily decrease while accuracies improve and remain close (gap < 0.03). Gradient norms stay moderate (~1.8\u21921.2) without collapse. Test accuracy is high (0.9159). No signs of overfitting, learning\u2011rate issues, vanishing gradients, label noise, or frozen layers.",
-    "tool_calls_used": 2
+    "evidence": "Training loss and accuracy improve steadily, validation loss and accuracy follow similarly with a small train/val accuracy gap (~2%). Gradients stay moderate, and test accuracy (0.9159) ranks among the top runs, only marginally below the best healthy runs.",
+    "tool_calls_used": 3
   },
   {
     "run_id": "label_noise_01",
@@ -85,9 +85,9 @@
     "true_problem_type": "label_noise",
     "predicted_problem_detected": true,
     "predicted_diagnosis": "label_noise",
-    "confidence": "medium",
-    "evidence": "Training accuracy improves slowly and remains well below typical clean runs, while validation accuracy and loss show little improvement and validation loss even increases slightly, indicating the model is learning from noisy labels. Gradient norms remain stable, ruling out vanishing gradients or learning rate issues.",
-    "tool_calls_used": 3
+    "confidence": "high",
+    "evidence": "The run's test accuracy (0.898) is noticeably lower than the top healthy runs (~0.92) while the train/validation accuracy gap remains small (~0.02). Both training and validation losses stay high and decrease only modestly, and gradient norms are stable, indicating the model is learning but limited by noisy labels.",
+    "tool_calls_used": 5
   },
   {
     "run_id": "label_noise_02",
@@ -96,8 +96,8 @@
     "predicted_problem_detected": true,
     "predicted_diagnosis": "label_noise",
     "confidence": "high",
-    "evidence": "The run has a 40% label noise setting; training and validation accuracy plateau around ~55% with only slight loss reduction, while train/val loss remain high. The gap between train and val metrics is minimal, indicating the issue is not overfitting but the noisy supervision limiting learning.",
-    "tool_calls_used": 2
+    "evidence": "Train accuracy rises only modestly (0.47\u21920.56) while validation accuracy stays near 0.5, indicating the model cannot learn the training signal. Test accuracy (0.8898) is noticeably below the healthy cluster (~0.915) despite a small train/val gap, a hallmark of noisy labels limiting performance.",
+    "tool_calls_used": 4
   },
   {
     "run_id": "label_noise_03",
@@ -106,8 +106,8 @@
     "predicted_problem_detected": true,
     "predicted_diagnosis": "label_noise",
     "confidence": "high",
-    "evidence": "The run was configured with 50% label noise. Training and validation accuracies stay low (\u22480.45) and loss plateaus early, indicating the model cannot learn the true patterns from the corrupted labels. The gap between train and val metrics is small, ruling out overfitting, and the learning rate is typical, so label noise is the primary issue.",
-    "tool_calls_used": 2
+    "evidence": "The run has a 0.5 label noise fraction and its final test accuracy (0.8749) is noticeably lower than the healthy runs (~0.915) and lower than other label-noise runs, while train and validation accuracies remain close, indicating the model cannot learn due to noisy labels. Gradients are stable and loss decreases modestly, ruling out learning-rate or gradient issues.",
+    "tool_calls_used": 6
   },
   {
     "run_id": "lr_high_01",
@@ -116,8 +116,8 @@
     "predicted_problem_detected": true,
     "predicted_diagnosis": "lr_too_high",
     "confidence": "high",
-    "evidence": "Training and validation loss remain stuck around 2.30 (\u2248 ln(10)) with ~10% accuracy throughout all epochs, and grad_norm drops sharply after epoch 1 to a very small value. This pattern matches an excessively high learning rate pushing the model into a saturated state.",
-    "tool_calls_used": 2
+    "evidence": "Training and validation loss remain ~2.30 (\u2248ln(10)) and accuracies stay at ~0.1 throughout, with grad_norm dropping sharply after epoch 1. Test accuracy is the lowest among all runs (0.1), indicating the model failed to learn due to an excessively high learning rate.",
+    "tool_calls_used": 3
   },
   {
     "run_id": "lr_high_02",
@@ -126,8 +126,8 @@
     "predicted_problem_detected": true,
     "predicted_diagnosis": "lr_too_high",
     "confidence": "high",
-    "evidence": "Training and validation loss remain around 2.3 (\u2248ln(num_classes)) with accuracies near 0.1 throughout, indicating no learning. Gradients are moderate in epoch 1 (0.71) then drop to ~0.12, consistent with a high learning rate saturating the model early rather than a large initial gradient collapse.",
-    "tool_calls_used": 5
+    "evidence": "The loss remains around 2.3 (\u2248ln(10)) and train/val accuracy stays at ~10% throughout all epochs, with grad_norm dropping from 0.71 to ~0.12 after the first epoch. Test accuracy (0.10) is far below the top runs (~0.92), indicating the model never learned.",
+    "tool_calls_used": 3
   },
   {
     "run_id": "lr_high_03",
@@ -136,38 +136,38 @@
     "predicted_problem_detected": true,
     "predicted_diagnosis": "lr_too_high",
     "confidence": "high",
-    "evidence": "The run uses a very high learning rate (0.08). Train/val loss stays around 2.31 (\u2248ln(num_classes)) and accuracy remains ~10% (random guessing). Gradients drop from ~1.27 in epoch 1 to ~0.12 thereafter, indicating saturation caused by excessive learning rate.",
-    "tool_calls_used": 5
+    "evidence": "The run uses a very high learning rate (0.08) and achieves test accuracy of only 10% (random guess). Training and validation loss quickly settle near ln(num_classes) (~2.31) and gradients drop from a moderate value in epoch\u202f1 to very small values thereafter, indicating the model got stuck in a saturated state due to an excessive learning rate.",
+    "tool_calls_used": 3
   },
   {
     "run_id": "lr_low_01",
     "true_label": "problem",
     "true_problem_type": "lr_too_low",
-    "predicted_problem_detected": false,
-    "predicted_diagnosis": "healthy",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "lr_too_low",
     "confidence": "high",
-    "evidence": "Training and validation loss both steadily decrease and accuracies improve together, with final test accuracy ~0.81. Gradient norms increase rather than vanish, and there is no large train/val gap indicating overfitting.",
-    "tool_calls_used": 2
+    "evidence": "The run has a very low learning rate (1e-05) and ends with test accuracy 0.8137, far below the top-performing runs (~0.92). Training and validation accuracies plateau around 0.80-0.82 with still\u2011moderate loss, indicating underfitting rather than overfitting or other issues.",
+    "tool_calls_used": 3
   },
   {
     "run_id": "lr_low_02",
     "true_label": "problem",
     "true_problem_type": "lr_too_low",
-    "predicted_problem_detected": false,
-    "predicted_diagnosis": "healthy",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "lr_too_low",
     "confidence": "high",
-    "evidence": "Both training and validation loss steadily decreased and accuracies improved across all epochs, with a small train/val accuracy gap and increasing gradient norms, indicating proper learning despite the low learning rate.",
-    "tool_calls_used": 2
+    "evidence": "The run uses a very low learning rate (5e-06). While loss and accuracy improve over 10 epochs, the final test accuracy (0.7838) is far below the top-performing runs (~0.92), indicating the model never reached its potential within the training budget.",
+    "tool_calls_used": 6
   },
   {
     "run_id": "lr_low_03",
     "true_label": "problem",
     "true_problem_type": "lr_too_low",
-    "predicted_problem_detected": false,
-    "predicted_diagnosis": "healthy",
+    "predicted_problem_detected": true,
+    "predicted_diagnosis": "lr_too_low",
     "confidence": "high",
-    "evidence": "Both training and validation loss steadily decreased and accuracies rose to ~0.85 with a small train/val gap, and gradient norms remained stable/increasing. No signs of overfitting, gradient collapse, or other issues.",
-    "tool_calls_used": 2
+    "evidence": "The run's final validation accuracy (0.854) is noticeably below the healthy cluster (~0.92) and frozen-layer runs (~0.89), while training and validation metrics remain closely matched and gradient norms stay stable. Loss decreases steadily but never reaches the lower levels seen in higher\u2011performing runs, indicating the optimizer is not moving quickly enough to a better optimum.",
+    "tool_calls_used": 3
   },
   {
     "run_id": "overfit_01",
@@ -176,8 +176,8 @@
     "predicted_problem_detected": true,
     "predicted_diagnosis": "overfitting",
     "confidence": "high",
-    "evidence": "Training accuracy rises steadily to ~0.96 while validation accuracy plateaus around ~0.85, creating a growing gap after epoch 10. Training loss continues to drop to ~0.12, but validation loss stalls near ~0.5, indicating the model is fitting the training data too closely. Gradient norms remain stable, ruling out vanishing gradients.",
-    "tool_calls_used": 2
+    "evidence": "Train accuracy rises to ~96% while validation accuracy plateaus around 83-85%, creating a ~10% gap. The final test accuracy (0.84) is substantially lower than healthy runs (~0.92), indicating the model has memorized training data.",
+    "tool_calls_used": 6
   },
   {
     "run_id": "overfit_02",
@@ -186,7 +186,7 @@
     "predicted_problem_detected": true,
     "predicted_diagnosis": "overfitting",
     "confidence": "high",
-    "evidence": "Training accuracy rises to ~0.96 while validation accuracy plateaus around 0.84 and even slightly declines after epoch 20, creating a growing train\u2011val gap (~0.13). Training loss keeps decreasing whereas validation loss stagnates around 0.5, a classic sign of overfitting.",
+    "evidence": "Training accuracy climbs to ~0.96 while validation accuracy stalls around ~0.84, creating a ~0.12 gap. Test accuracy (0.8296) is well below the healthy cluster (~0.915) despite low training loss, indicating the model has memorized the training data.",
     "tool_calls_used": 2
   },
   {
@@ -196,8 +196,8 @@
     "predicted_problem_detected": true,
     "predicted_diagnosis": "overfitting",
     "confidence": "high",
-    "evidence": "Training accuracy climbs to ~0.96 while validation accuracy plateaus around ~0.84\u20130.85, creating a persistent ~0.1 gap. Training loss continues to drop whereas validation loss stagnates, indicating the model is memorizing the small training subset.",
-    "tool_calls_used": 2
+    "evidence": "Training accuracy climbs to ~96% while validation accuracy stalls around 85%, creating a ~10% gap. Validation loss stops improving and test accuracy (0.8484) is well below the top healthy runs (~0.92). These patterns are classic signs of overfitting.",
+    "tool_calls_used": 3
   },
   {
     "run_id": "vanish_grad_01",
@@ -206,8 +206,8 @@
     "predicted_problem_detected": true,
     "predicted_diagnosis": "vanishing_gradients",
     "confidence": "high",
-    "evidence": "Epoch 1 shows an extremely large gradient norm (~1.9e5) that collapses sharply over subsequent epochs to a few hundred, while loss remains extremely high and accuracy stays low and decreases, indicating gradients vanish after a poor initialization. The learning rate is modest, ruling out lr_too_high.",
-    "tool_calls_used": 6
+    "evidence": "The run starts with an extremely large gradient norm (\u2248188k) that sharply collapses to <500 by epoch 10, while loss remains huge and both train and validation accuracy drop to ~13%. The test accuracy (0.135) is far below healthy runs (>0.91). This pattern matches vanishing gradients.",
+    "tool_calls_used": 3
   },
   {
     "run_id": "vanish_grad_02",
@@ -216,8 +216,8 @@
     "predicted_problem_detected": true,
     "predicted_diagnosis": "vanishing_gradients",
     "confidence": "high",
-    "evidence": "Grad_norm starts extremely high (212k) in epoch 1 and collapses rapidly to under 1k by epoch 10, while loss remains very large and both training and validation accuracy drop sharply, a hallmark of vanishing gradients caused by poor initialization.",
-    "tool_calls_used": 2
+    "evidence": "Epoch 1 shows an extremely large grad_norm (212k) and enormous loss, which then collapses sharply over epochs while both train and validation accuracies remain low and close together. The final test accuracy (0.174) is far below the top-performing runs (~0.92), indicating the model never learned.",
+    "tool_calls_used": 3
   },
   {
     "run_id": "vanish_grad_03",
@@ -226,7 +226,7 @@
     "predicted_problem_detected": true,
     "predicted_diagnosis": "vanishing_gradients",
     "confidence": "high",
-    "evidence": "Grad_norm starts extremely high (~292k) in epoch 1 and collapses steadily to ~749 by epoch 10, while both training and validation loss drop but accuracy also falls to near random (~0.13). This pattern matches the classic signature of vanishing gradients from a bad initialization.",
-    "tool_calls_used": 3
+    "evidence": "The run shows an extremely large gradient norm in epoch 1 (\u22482.9e5) that collapses to <1e3 by epoch 10, while loss decreases but both training and validation accuracy remain very low and continue to drop. Its final test accuracy (0.1365) is far below the top runs (~0.92), confirming a serious issue.",
+    "tool_calls_used": 6
   }
 ]

@@ -1,7 +1,7 @@
 {
   "problem_detected": false,
   "diagnosis": "healthy",
-  "evidence": "Training and validation loss steadily decrease while accuracies improve and remain close (gap < 0.03). Gradient norms stay moderate (~1.8\u21921.2) without collapse. Test accuracy is high (0.9159). No signs of overfitting, learning\u2011rate issues, vanishing gradients, label noise, or frozen layers.",
+  "evidence": "Training loss and accuracy improve steadily, validation loss and accuracy follow similarly with a small train/val accuracy gap (~2%). Gradients stay moderate, and test accuracy (0.9159) ranks among the top runs, only marginally below the best healthy runs.",
   "confidence": "high",
   "run_id": "healthy_05",
   "query_history": [
@@ -120,7 +120,99 @@
           ]
         ]
       }
+    },
+    {
+      "query": "SELECT run_id, test_acc FROM runs ORDER BY test_acc DESC LIMIT 20;",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "test_acc"
+        ],
+        "rows": [
+          [
+            "healthy_01",
+            0.9199
+          ],
+          [
+            "healthy_04",
+            0.9188
+          ],
+          [
+            "healthy_03",
+            0.9182
+          ],
+          [
+            "healthy_05",
+            0.9159
+          ],
+          [
+            "healthy_02",
+            0.9149
+          ],
+          [
+            "label_noise_01",
+            0.8978
+          ],
+          [
+            "frozen_layer_03",
+            0.8922
+          ],
+          [
+            "label_noise_02",
+            0.8898
+          ],
+          [
+            "frozen_layer_02",
+            0.888
+          ],
+          [
+            "frozen_layer_01",
+            0.8832
+          ],
+          [
+            "label_noise_03",
+            0.8749
+          ],
+          [
+            "lr_low_03",
+            0.8498
+          ],
+          [
+            "overfit_03",
+            0.8484
+          ],
+          [
+            "overfit_01",
+            0.8403
+          ],
+          [
+            "overfit_02",
+            0.8296
+          ],
+          [
+            "lr_low_01",
+            0.8137
+          ],
+          [
+            "lr_low_02",
+            0.7838
+          ],
+          [
+            "vanish_grad_02",
+            0.1746
+          ],
+          [
+            "vanish_grad_03",
+            0.1365
+          ],
+          [
+            "vanish_grad_01",
+            0.1352
+          ]
+        ]
+      }
     }
   ],
-  "tool_calls_used": 2
+  "tool_calls_used": 3
 }

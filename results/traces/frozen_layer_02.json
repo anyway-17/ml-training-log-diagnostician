@@ -1,44 +1,10 @@
 {
-  "problem_detected": false,
-  "diagnosis": "healthy",
-  "evidence": "Training loss steadily decreased and both training and validation accuracy improved together, with a small and stable accuracy gap. Gradient norms remained moderate without collapse, and final test accuracy is high, indicating no overfitting, learning\u2011rate, or gradient issues.",
+  "problem_detected": true,
+  "diagnosis": "frozen_layer",
+  "evidence": "The run freezes the first two convolutional layers and achieves a test accuracy (0.888) noticeably below the top healthy runs (~0.92) despite small train/validation gaps and stable gradient norms, indicating reduced learning capacity from frozen layers.",
   "confidence": "high",
   "run_id": "frozen_layer_02",
   "query_history": [
-    {
-      "query": "SELECT run_id, max_epoch, final_train_acc, final_val_acc, final_test_acc FROM runs WHERE run_id = 'frozen_layer_02';",
-      "result": {
-        "success": false,
-        "error": "SQL error: no such column: max_epoch"
-      }
-    },
-    {
-      "query": "PRAGMA table_info(runs);",
-      "result": {
-        "success": false,
-        "error": "Query rejected: Only SELECT statements are allowed."
-      }
-    },
-    {
-      "query": "SELECT * FROM runs LIMIT 1;",
-      "result": {
-        "success": true,
-        "columns": [
-          "run_id",
-          "config_json",
-          "test_acc",
-          "created_at"
-        ],
-        "rows": [
-          [
-            "frozen_layer_01",
-            "{\"epochs\": 10, \"batch_size\": 64, \"lr\": 0.001, \"weight_decay\": 0.0, \"seed\": 1, \"train_subset_frac\": 1.0, \"label_noise_frac\": 0.0, \"freeze_conv1\": true, \"freeze_conv2\": true, \"init_scheme\": \"default\", \"output_dir\": \"../data_generation/raw\", \"dropout_rate\": 0.25}",
-            0.8832,
-            "2026-08-25 23:54:33"
-          ]
-        ]
-      }
-    },
     {
       "query": "SELECT * FROM runs WHERE run_id = 'frozen_layer_02';",
       "result": {
@@ -60,14 +26,94 @@
       }
     },
     {
-      "query": "SELECT epoch, train_loss, train_acc, val_loss, val_acc, grad_norm FROM epochs WHERE run_id = 'frozen_layer_02' ORDER BY epoch;",
+      "query": "SELECT test_acc FROM runs ORDER BY test_acc DESC;",
+      "result": {
+        "success": true,
+        "columns": [
+          "test_acc"
+        ],
+        "rows": [
+          [
+            0.9199
+          ],
+          [
+            0.9188
+          ],
+          [
+            0.9182
+          ],
+          [
+            0.9159
+          ],
+          [
+            0.9149
+          ],
+          [
+            0.8978
+          ],
+          [
+            0.8922
+          ],
+          [
+            0.8898
+          ],
+          [
+            0.888
+          ],
+          [
+            0.8832
+          ],
+          [
+            0.8749
+          ],
+          [
+            0.8498
+          ],
+          [
+            0.8484
+          ],
+          [
+            0.8403
+          ],
+          [
+            0.8296
+          ],
+          [
+            0.8137
+          ],
+          [
+            0.7838
+          ],
+          [
+            0.1746
+          ],
+          [
+            0.1365
+          ],
+          [
+            0.1352
+          ],
+          [
+            0.1
+          ],
+          [
+            0.1
+          ],
+          [
+            0.1
+          ]
+        ]
+      }
+    },
+    {
+      "query": "SELECT epoch, train_loss, val_loss, train_acc, val_acc, grad_norm FROM epochs WHERE run_id = 'frozen_layer_02' ORDER BY epoch;",
       "result": {
         "success": true,
         "columns": [
           "epoch",
           "train_loss",
-          "train_acc",
           "val_loss",
+          "train_acc",
           "val_acc",
           "grad_norm"
         ],
@@ -75,80 +121,80 @@
           [
             1,
             0.727806,
-            0.745556,
             0.469496,
+            0.745556,
             0.827333,
             1.116539
           ],
           [
             2,
             0.469014,
-            0.832074,
             0.389395,
+            0.832074,
             0.861333,
             0.973466
           ],
           [
             3,
             0.414371,
-            0.851519,
             0.361516,
+            0.851519,
             0.866167,
             0.916059
           ],
           [
             4,
             0.385441,
-            0.861611,
             0.338634,
+            0.861611,
             0.871333,
             0.865031
           ],
           [
             5,
             0.363488,
-            0.869704,
             0.321804,
+            0.869704,
             0.878833,
             0.854224
           ],
           [
             6,
             0.347942,
-            0.87613,
             0.33436,
+            0.87613,
             0.876333,
             0.81559
           ],
           [
             7,
             0.333497,
-            0.880278,
             0.318778,
+            0.880278,
             0.882333,
             0.811933
           ],
           [
             8,
             0.322653,
-            0.882593,
             0.301768,
+            0.882593,
             0.886667,
             0.785115
           ],
           [
             9,
             0.3152,
-            0.885426,
             0.28766,
+            0.885426,
             0.896167,
             0.776007
           ],
           [
             10,
             0.304201,
-            0.889574,
             0.284008,
+            0.889574,
             0.895833,
             0.766665
           ]
@@ -156,42 +202,149 @@
       }
     },
     {
-      "query": "SELECT (train_acc - val_acc) AS acc_gap FROM epochs WHERE run_id = 'frozen_layer_02' ORDER BY epoch;",
+      "query": "SELECT run_id, MAX(train_acc) as max_train_acc FROM epochs GROUP BY run_id ORDER BY max_train_acc DESC LIMIT 5;",
       "result": {
         "success": true,
         "columns": [
-          "acc_gap"
+          "run_id",
+          "max_train_acc"
         ],
         "rows": [
           [
-            -0.08177699999999999
+            "overfit_03",
+            0.967284
           ],
           [
-            -0.029259000000000035
+            "overfit_02",
+            0.964815
           ],
           [
-            -0.014647999999999994
+            "overfit_01",
+            0.959259
           ],
           [
-            -0.009722000000000008
+            "healthy_05",
+            0.948315
           ],
           [
-            -0.009128999999999943
+            "healthy_03",
+            0.944852
+          ]
+        ]
+      }
+    },
+    {
+      "query": "SELECT run_id, test_acc FROM runs WHERE config_json LIKE '%\"freeze_conv1\": true%';",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "test_acc"
+        ],
+        "rows": [
+          [
+            "frozen_layer_01",
+            0.8832
           ],
           [
-            -0.00020300000000006424
+            "frozen_layer_02",
+            0.888
           ],
           [
-            -0.002055000000000029
+            "frozen_layer_03",
+            0.8922
+          ]
+        ]
+      }
+    },
+    {
+      "query": "SELECT run_id, test_acc FROM runs WHERE config_json NOT LIKE '%\"freeze_conv1\": true%';",
+      "result": {
+        "success": true,
+        "columns": [
+          "run_id",
+          "test_acc"
+        ],
+        "rows": [
+          [
+            "healthy_01",
+            0.9199
           ],
           [
-            -0.004074000000000022
+            "healthy_02",
+            0.9149
           ],
           [
-            -0.010741
+            "healthy_03",
+            0.9182
           ],
           [
-            -0.0062590000000000146
+            "healthy_04",
+            0.9188
+          ],
+          [
+            "healthy_05",
+            0.9159
+          ],
+          [
+            "label_noise_01",
+            0.8978
+          ],
+          [
+            "label_noise_02",
+            0.8898
+          ],
+          [
+            "label_noise_03",
+            0.8749
+          ],
+          [
+            "lr_high_01",
+            0.1
+          ],
+          [
+            "lr_high_02",
+            0.1
+          ],
+          [
+            "lr_high_03",
+            0.1
+          ],
+          [
+            "lr_low_01",
+            0.8137
+          ],
+          [
+            "lr_low_02",
+            0.7838
+          ],
+          [
+            "lr_low_03",
+            0.8498
+          ],
+          [
+            "overfit_01",
+            0.8403
+          ],
+          [
+            "overfit_02",
+            0.8296
+          ],
+          [
+            "overfit_03",
+            0.8484
+          ],
+          [
+            "vanish_grad_01",
+            0.1352
+          ],
+          [
+            "vanish_grad_02",
+            0.1746
+          ],
+          [
+            "vanish_grad_03",
+            0.1365
           ]
         ]
       }
