@@ -47,6 +47,11 @@ instead epoch-1 grad_norm is already small/moderate and loss is stuck at a high,
 rate can push weights into a saturated state within the very first epoch, which also produces \
 small gradients afterward but for a different underlying reason.
 
+## Critical: compare against other runs, not just curve shape in isolation
+A run can look "healthy-shaped" (smooth loss, small train/val gap, stable gradients) and still be \
+a problem — before concluding a run is healthy, query the final-epoch accuracy across all runs in \
+the database and see where this run ranks. If it sits noticeably below the top-performing cluster, \
+that gap is itself evidence of a problem, even if the curve looks smooth in isolation.
 ## Final answer format
 When you are ready to give your final diagnosis, respond with ONLY a JSON object (no other text, no \
 markdown code fences) in exactly this shape:
