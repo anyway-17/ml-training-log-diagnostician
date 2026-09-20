@@ -60,6 +60,19 @@ FAILURE_RUNS = [
     {"run_id": "frozen_layer_03", "seed": 3, "freeze_conv1": True, "freeze_conv2": True, "injected_problem_type": "frozen_layer"},
 ]
 
+EDGE_CASE_RUNS = [
+    # --- Overlapping failures ---
+    {"run_id": "overlap_lr_noise_01", "seed": 1, "lr": 0.03, "label_noise_frac": 0.3,
+     "injected_problem_type": "lr_too_high+label_noise"},
+    {"run_id": "overlap_frozen_lownoise_01", "seed": 2, "freeze_conv1": True, "freeze_conv2": True,
+     "label_noise_frac": 0.15, "injected_problem_type": "frozen_layer+label_noise"},
+
+    # --- Borderline/mild ---
+    {"run_id": "borderline_lr_mild_01", "seed": 3, "lr": 0.005,
+     "injected_problem_type": "lr_too_high_mild"},  # only 5x, vs 10-50x for the "real" lr_too_high runs
+    {"run_id": "borderline_noise_mild_01", "seed": 4, "label_noise_frac": 0.1,
+     "injected_problem_type": "label_noise_mild"},  # 10% vs 30-50% for the "real" label_noise runs
+]
 
 def build_command(cfg: dict) -> list:
     epochs = cfg.get("epochs", EPOCHS)
@@ -106,7 +119,7 @@ def run_all(configs: list):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--stage", choices=["healthy", "failures", "all"], default="healthy")
+    parser.add_argument("--stage", choices=["healthy", "failures", "edge_cases", "all"], default="healthy")
     parser.add_argument("--filter", type=str, default=None,
                          help="Only run configs whose run_id contains this substring (e.g. 'overfit')")
     args = parser.parse_args()
@@ -115,8 +128,11 @@ if __name__ == "__main__":
         configs = HEALTHY_RUNS
     elif args.stage == "failures":
         configs = FAILURE_RUNS
+    elif args.stage == "edge_cases":
+        configs = EDGE_CASE_RUNS
     else:
         configs = HEALTHY_RUNS + FAILURE_RUNS
+    
 
     if args.filter:
         configs = [cfg for cfg in configs if args.filter in cfg["run_id"]]

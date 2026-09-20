@@ -1,4 +1,12 @@
 {
+  "borderline_lr_mild_01": {
+    "label": "problem",
+    "injected_problem_type": "lr_too_high_mild"
+  },
+  "borderline_noise_mild_01": {
+    "label": "problem",
+    "injected_problem_type": "label_noise_mild"
+  },
   "frozen_layer_01": {
     "label": "problem",
     "injected_problem_type": "frozen_layer"
@@ -78,6 +86,14 @@
   "overfit_03": {
     "label": "problem",
     "injected_problem_type": "overfitting"
+  },
+  "overlap_frozen_lownoise_01": {
+    "label": "problem",
+    "injected_problem_type": "frozen_layer+label_noise"
+  },
+  "overlap_lr_noise_01": {
+    "label": "problem",
+    "injected_problem_type": "lr_too_high+label_noise"
   },
   "vanish_grad_01": {
     "label": "problem",
